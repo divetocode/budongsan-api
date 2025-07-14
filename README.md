@@ -26,7 +26,8 @@ yarn add budongsan-api
 ## 🚀 사용예제
 
 ```ts
-import { BudongsanAPI } from 'budongsan-api';
+import { BudongsanAPI } from 'budongsan-api'; // ESM
+// or const { BudongsanAPI } = require('budongsan-api'); // CommonJS
 
 // API 키는 공공데이터 포털에서 발급받은 서비스 키를 입력하세요.
 const api = new BudongsanAPI('YOUR_SERVICE_KEY');
@@ -34,7 +35,7 @@ const api = new BudongsanAPI('YOUR_SERVICE_KEY');
 async function main() {
   try {
     // 아파트 단지 기본 정보 조회
-    const info = await api.getApartmentBasicInfo('A12345678');
+    const info = await api.getApartmentBasicInfo('A10027364'); // '덕수궁롯데캐슬아파트'
     console.log('단지 정보:', info);
   } catch (error) {
     console.error('API 호출 실패:', error.message);

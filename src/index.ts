@@ -21,8 +21,8 @@ export class BudongsanAPI {
      * @throws API 호출 실패 시 예외가 발생합니다.
      */
     async getApartmentBasicInfo(kaptCode: string): Promise<any> {
-        const url = `http://apis.data.go.kr/1613000/AptBasisInfoServiceV3/getAphusBassInfoV3`;
-        return this.fetchAndExtract(url, { kaptCode });
+        const url = `http://apis.data.go.kr/1613000/AptBasisInfoServiceV3/getAphusBassInfoV3?serviceKey=${this.serviceKey}&kaptCode=${kaptCode}`
+        return this.fetchAndExtract(url);
     }
 
     /**
@@ -32,8 +32,8 @@ export class BudongsanAPI {
      * @throws API 호출 실패 시 예외가 발생합니다.
      */
     async getApartmentDetailInfo(kaptCode: string): Promise<any> {
-        const url = `http://apis.data.go.kr/1613000/AptBasisInfoServiceV3/getAphusDtlInfoV3`;
-        return this.fetchAndExtract(url, { kaptCode });
+        const url = `http://apis.data.go.kr/1613000/AptBasisInfoServiceV3/getAphusDtlInfoV3?serviceKey=${this.serviceKey}&kaptCode=${kaptCode}`;
+        return this.fetchAndExtract(url);
     }
 
     /**
@@ -45,8 +45,8 @@ export class BudongsanAPI {
      * @throws API 호출 실패 시 예외가 발생합니다.
      */
     async getApartmentList(sigunguCode: string, pageNo: string, numOfRows: string): Promise<any> {
-        const url = `http://apis.data.go.kr/1613000/AptListService2/getSigunguAptList`;
-        return this.fetchAndExtract(url, { sigunguCode, pageNo, numOfRows });
+        const url = `http://apis.data.go.kr/1613000/AptListService2/getSigunguAptList?serviceKey=${this.serviceKey}&sigunguCode=${sigunguCode}&pageNo=${pageNo}&numOfRows=${numOfRows}`;
+        return this.fetchAndExtract(url);
     }
 
     /**
@@ -57,8 +57,8 @@ export class BudongsanAPI {
      * @throws API 호출 실패 시 예외가 발생합니다.
      */
     async getApartmentTradeBasic(LAWD_CD: string, DEAL_YMD: string): Promise<any> {
-        const url = `http://apis.data.go.kr/1613000/RTMSDataSvcAptTrade/getRTMSDataSvcAptTrade`;
-        return this.fetchAndExtract(url, { LAWD_CD, DEAL_YMD });
+        const url = `http://apis.data.go.kr/1613000/RTMSDataSvcAptTrade/getRTMSDataSvcAptTrade?serviceKey=${this.serviceKey}&LAWD_CD=${LAWD_CD}&DEAL_YMD=${DEAL_YMD}`;
+        return this.fetchAndExtract(url);
     }
 
     /**
@@ -71,8 +71,8 @@ export class BudongsanAPI {
      * @throws API 호출 실패 시 예외가 발생합니다.
      */
     async getApartmentTradeDetail(pageNo: string, numOfRows: string, LAWD_CD: string, DEAL_YMD: string): Promise<any> {
-        const url = `https://apis.data.go.kr/1613000/RTMSDataSvcAptTradeDev/getRTMSDataSvcAptTradeDev`;
-        return this.fetchAndExtract(url, { pageNo, numOfRows, LAWD_CD, DEAL_YMD });
+        const url = `https://apis.data.go.kr/1613000/RTMSDataSvcAptTradeDev/getRTMSDataSvcAptTradeDev?serviceKey=${this.serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&LAWD_CD=${LAWD_CD}&DEAL_YMD=${DEAL_YMD}`;
+        return this.fetchAndExtract(url);
     }
 
     /**
@@ -83,22 +83,16 @@ export class BudongsanAPI {
      * @throws API 호출 실패 시 예외가 발생합니다.
      */
     async getApartmentRentInfo(LAWD_CD: string, DEAL_YMD: string): Promise<any> {
-        const url = `https://apis.data.go.kr/1613000/RTMSDataSvcAptRent/getRTMSDataSvcAptRent`;
-        return this.fetchAndExtract(url, { LAWD_CD, DEAL_YMD });
+        const url = `https://apis.data.go.kr/1613000/RTMSDataSvcAptRent/getRTMSDataSvcAptRent?serviceKey=${this.serviceKey}&LAWD_CD=${LAWD_CD}&DEAL_YMD=${DEAL_YMD}`;
+        return this.fetchAndExtract(url);
     }
 
     /**
      * 공통 fetch 및 응답 처리 로직
      */
-    private async fetchAndExtract(url: string, params: Record<string, string>): Promise<any> {
+    private async fetchAndExtract(url: string): Promise<any> {
         try {
-            const res: AxiosResponse<any> = await axios.get(url, {
-                params: {
-                    serviceKey: this.serviceKey,
-                    ...params,
-                },
-            });
-
+            const res: AxiosResponse<any> = await axios.get(url);
             const { header, body } = res.data.response;
 
             if (header.resultCode === '00' || header.resultCode === '000') {

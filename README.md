@@ -82,6 +82,8 @@ main();
 |--------|------|
 | `getRentData(complexCode: string)` | 전월세 거래 정보 조회 |
 
+<br>
+
 메서드 계속 추가 예정입니다!
 
 <br><br>

@@ -62,8 +62,9 @@ main();
 
 | 메서드 | 설명 |
 |--------|------|
-| `getApartmentBasicInfo(complexCode: string)` | 단지 기본 정보 조회 |
-| `getApartmentDetailInfo(complexCode: string)` | 단지 상세 정보 조회 |
+| `getApartmentBasicInfo(kaptCode: string)` | 단지 기본 정보 조회 |
+| `getApartmentDetailInfo(kaptCode: string)` | 단지 상세 정보 조회 |
+| `getApartmentList(sigunguCode: string, pageNo: string, numOfRows: string)` | 아파트 단지 목록 조회 |
 
 <br>
 
@@ -71,8 +72,8 @@ main();
 
 | 메서드 | 설명 |
 |--------|------|
-| `getTradeData(complexCode: string)` | 실거래가 기본 데이터 조회 |
-| `getTradeDetailData(complexCode: string)` | 실거래가 상세 데이터 조회 |
+| `getApartmentTradeBasic(LAWD_CD: string, DEAL_YMD: string)` | 실거래가 기본 데이터 조회 |
+| `getApartmentTradeDetail(pageNo: string, numOfRows: string, LAWD_CD: string, DEAL_YMD: string)` | 실거래가 상세 데이터 조회 |
 
 <br>
 
@@ -80,9 +81,9 @@ main();
 
 | 메서드 | 설명 |
 |--------|------|
-| `getRentData(complexCode: string)` | 전월세 거래 정보 조회 |
+| `getApartmentRentInfo(LAWD_CD: string, DEAL_YMD: string)` | 전월세 거래 정보 조회 |
 
-<br>
+<br><br>
 
 메서드 계속 추가 예정입니다!
 

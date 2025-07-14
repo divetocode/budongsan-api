@@ -1,8 +1,9 @@
 # 🏘️ BudongsanAPI
 
 > 국토교통부 공공데이터 포털의 아파트 단지 정보, 실거래가, 전월세 데이터를 간편하게 조회할 수 있는 TypeScript 기반 API 클라이언트입니다.
-
 ---
+
+<br><br>
 
 ## ✨ 특징
 
@@ -12,8 +13,10 @@
 - Axios 기반 HTTP 클라이언트 사용
 - TypeScript 지원 및 타입 안전성 보장
 - 요청 실패 시 명확한 예외 처리
-
 ---
+
+<br><br>
+
 ## 📦 설치
 
 ```bash
@@ -22,9 +25,9 @@ npm install budongsan-api
 yarn add budongsan-api
 ```
 
+<br><br>
 
 ## 🚀 사용예제
-
 ```ts
 import { BudongsanAPI } from 'budongsan-api'; // ESM
 // or const { BudongsanAPI } = require('budongsan-api'); // CommonJS
@@ -37,6 +40,10 @@ async function main() {
     // 아파트 단지 기본 정보 조회
     const info = await api.getApartmentBasicInfo('A10027364'); // '덕수궁롯데캐슬아파트'
     console.log('단지 정보:', info);
+
+    // 실거래가 조회 (서울 종로구, 2025년 5월 1페이지에서 10개 거래내역 가져옴)
+    const priceList = await api.getApartmentTradeDetail('1', '10', '11110', '202505'); 
+    console.log('실거래가 정보:', priceList);
   } catch (error) {
     console.error('API 호출 실패:', error.message);
   }
@@ -45,8 +52,11 @@ async function main() {
 main();
 ```
 
+<br><br>
 
 ## 📘 지원 메서드
+
+<br>
 
 ### 📌 아파트 단지 정보
 
@@ -55,6 +65,8 @@ main();
 | `getApartmentBasicInfo(complexCode: string)` | 단지 기본 정보 조회 |
 | `getApartmentDetailInfo(complexCode: string)` | 단지 상세 정보 조회 |
 
+<br>
+
 ### 📌 실거래가
 
 | 메서드 | 설명 |
@@ -62,12 +74,17 @@ main();
 | `getTradeData(complexCode: string)` | 실거래가 기본 데이터 조회 |
 | `getTradeDetailData(complexCode: string)` | 실거래가 상세 데이터 조회 |
 
+<br>
+
 ### 📌 전월세
 
 | 메서드 | 설명 |
 |--------|------|
 | `getRentData(complexCode: string)` | 전월세 거래 정보 조회 |
 
+메서드 계속 추가 예정입니다!
+
+<br><br>
 
 ## 🛠️ 요구 사항
 
@@ -78,6 +95,7 @@ main();
   국토교통부 공공데이터 포털에서 발급받은 서비스 키를 사용해야 합니다.  
   👉 [공공데이터포털 바로가기](https://www.data.go.kr/)
 
+<br><br>
 
 ## ❗ 예외 처리
 
@@ -98,3 +116,5 @@ main();
 
 - ⛔ **요청 제한 초과**  
   API 호출 횟수 제한을 초과했을 경우
+
+<br><br>

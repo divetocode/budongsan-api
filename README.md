@@ -117,6 +117,8 @@ main();
 |--------|------|
 | `getApartmentRentInfo(LAWD_CD: string, DEAL_YMD: string)` | 전월세 거래 정보 조회 |
 
+<br><br>
+
 ### SigunguService 인스턴스
 
 #### 📌 시군구 정보

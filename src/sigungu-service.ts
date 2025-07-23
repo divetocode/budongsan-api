@@ -60,7 +60,7 @@ export class SigunguServiceClass {
         sido_code,
         sigungu_name,
         sigungu_code,
-        bjd_array,
+        // bjd_array,
       }))
     );
   }

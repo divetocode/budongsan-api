@@ -42,7 +42,7 @@ async function main() {
     console.log('단지 정보:', info);
 
     // 실거래가 조회 (서울 종로구, 2025년 5월 1페이지에서 10개 거래내역 가져옴)
-    const priceList = await budongsan_api.getApartmentTradeDetail('1', '10', '11110', '202505'); 
+    const priceList = await budongsan_api.getApartmentTradeDetail('11110', '202505', '1', '10'); 
     console.log('실거래가 정보:', priceList);
 
     // 전체 시군구 목록 조회
@@ -98,7 +98,8 @@ main();
 |--------|------|
 | `getApartmentBasicInfo(kaptCode: string)` | 단지 기본 정보 조회 |
 | `getApartmentDetailInfo(kaptCode: string)` | 단지 상세 정보 조회 |
-| `getApartmentList(sigunguCode: string, pageNo: string, numOfRows: string)` | 아파트 단지 목록 조회 |
+| `getApartmentList(sigunguCode: string, numOfRows?: string, pageNo?: string)` | 시군구 코드 기반 아파트 목록 조회 |
+
 
 <br>
 
@@ -106,8 +107,8 @@ main();
 
 | 메서드 | 설명 |
 |--------|------|
-| `getApartmentTradeBasic(LAWD_CD: string, DEAL_YMD: string)` | 실거래가 기본 데이터 조회 |
-| `getApartmentTradeDetail(LAWD_CD: string, DEAL_YMD: string, pageNo: string, numOfRows: string)` | 실거래가 상세 데이터 조회 |
+| `getApartmentTradeBasicList(sigunguCode: string, DEAL_YMD: string, numOfRows?: string, pageNo?: string)` | 실거래가 기본 데이터 조회 |
+| `getApartmentTradeDetailList(sigunguCode: string, DEAL_YMD: string, numOfRows?: string, pageNo?: string)` | 실거래가 상세 데이터 조회 |
 
 <br>
 
@@ -115,9 +116,17 @@ main();
 
 | 메서드 | 설명 |
 |--------|------|
-| `getApartmentRentInfo(LAWD_CD: string, DEAL_YMD: string, pageNo: string, numOfRows: string)` | 전월세 거래 정보 조회 |
+| `getApartmentRentList(sigunguCode: string, DEAL_YMD: string, numOfRows?: string, pageNo?: string)` | 전월세 거래 정보 조회 |
 
-<br><br>
+<br>
+
+#### 📌 건축물대장
+
+| 메서드 | 설명 |
+|--------|------|
+| `getBrRecapTitleList(sigunguCode: string, bjdongCode: string, bun: string, ji: string, numOfRows?: string, pageNo?: string)` | 건축물대장 총괄표제부 정보 조회 |
+
+<br>
 
 ### SigunguService 인스턴스
 
@@ -127,6 +136,8 @@ main();
 | ------------------------------------------ | ------------------------------------------------ |
 | `getSigunguList()`                         | 시도/시군구 목록을 평탄화된 배열로 반환                           |
 | `getSigunguMap(keyType: "code" \| "name")` | 시군구 정보를 Map으로 반환 (`keyType`에 따라 시군구 코드 또는 이름 기준) |
+
+<br>
 
 #### 📌 법정동 정보 (BJD)
 

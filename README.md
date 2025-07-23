@@ -107,7 +107,7 @@ main();
 | 메서드 | 설명 |
 |--------|------|
 | `getApartmentTradeBasic(LAWD_CD: string, DEAL_YMD: string)` | 실거래가 기본 데이터 조회 |
-| `getApartmentTradeDetail(pageNo: string, numOfRows: string, LAWD_CD: string, DEAL_YMD: string)` | 실거래가 상세 데이터 조회 |
+| `getApartmentTradeDetail(LAWD_CD: string, DEAL_YMD: string, pageNo: string, numOfRows: string)` | 실거래가 상세 데이터 조회 |
 
 <br>
 
@@ -115,7 +115,7 @@ main();
 
 | 메서드 | 설명 |
 |--------|------|
-| `getApartmentRentInfo(LAWD_CD: string, DEAL_YMD: string)` | 전월세 거래 정보 조회 |
+| `getApartmentRentInfo(LAWD_CD: string, DEAL_YMD: string, pageNo: string, numOfRows: string)` | 전월세 거래 정보 조회 |
 
 <br><br>
 

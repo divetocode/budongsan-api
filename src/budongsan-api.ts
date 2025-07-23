@@ -63,14 +63,14 @@ export class BudongsanAPIClass {
 
     /**
      * 특정 거래 년월의 아파트 실거래가(상세)를 페이지 단위로 조회합니다.
-     * @param pageNo 페이지 번호
-     * @param numOfRows 페이지당 결과 수
      * @param LAWD_CD 법정동 코드 (5자리)
      * @param DEAL_YMD 거래 년월 (YYYYMM)
+     * @param pageNo 페이지 번호
+     * @param numOfRows 페이지당 결과 수
      * @returns 실거래 상세 정보 목록 (배열)
      * @throws API 호출 실패 시 예외가 발생합니다.
      */
-    async getApartmentTradeDetail(pageNo: string, numOfRows: string, LAWD_CD: string, DEAL_YMD: string): Promise<any> {
+    async getApartmentTradeDetail(LAWD_CD: string, DEAL_YMD: string, pageNo: string, numOfRows: string): Promise<any> {
         const url = `https://apis.data.go.kr/1613000/RTMSDataSvcAptTradeDev/getRTMSDataSvcAptTradeDev?serviceKey=${this.serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&LAWD_CD=${LAWD_CD}&DEAL_YMD=${DEAL_YMD}`;
         return this.fetchAndExtract(url);
     }
@@ -79,11 +79,13 @@ export class BudongsanAPIClass {
      * 특정 거래 년월의 아파트 전월세 정보를 조회합니다.
      * @param LAWD_CD 법정동 코드 (5자리)
      * @param DEAL_YMD 거래 년월 (YYYYMM)
+     * @param pageNo 페이지 번호
+     * @param numOfRows 페이지당 결과 수
      * @returns 전월세 정보 목록 (배열)
      * @throws API 호출 실패 시 예외가 발생합니다.
      */
-    async getApartmentRentInfo(LAWD_CD: string, DEAL_YMD: string): Promise<any> {
-        const url = `https://apis.data.go.kr/1613000/RTMSDataSvcAptRent/getRTMSDataSvcAptRent?serviceKey=${this.serviceKey}&LAWD_CD=${LAWD_CD}&DEAL_YMD=${DEAL_YMD}`;
+    async getApartmentRentInfo(LAWD_CD: string, DEAL_YMD: string, pageNo: string, numOfRows: string) {
+        const url = `https://apis.data.go.kr/1613000/RTMSDataSvcAptRent/getRTMSDataSvcAptRent?serviceKey=${this.serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&LAWD_CD=${LAWD_CD}&DEAL_YMD=${DEAL_YMD}`;
         return this.fetchAndExtract(url);
     }
 

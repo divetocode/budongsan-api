@@ -1,4 +1,5 @@
 import { BudongsanAPIClass } from "./budongsan-api";
 import SigunguService, { SigunguServiceClass } from "./sigungu-service";
+import BudongsanUtil from "./budongsan-util";
 
-export { BudongsanAPIClass, SigunguService, SigunguServiceClass }
+export { BudongsanAPIClass, BudongsanUtil, SigunguService, SigunguServiceClass }

@@ -1,36 +1,36 @@
 import fs from "fs";
 import path from "path";
 
-type Bjd = {
+type T_Bjd = {
   bjd_code: string;
   bjd_name: string;
 };
 
-type Sigungu = {
+type T_Sigungu = {
   sigungu_name: string;
   sigungu_code: string;
-  bjd_array?: Bjd[];
+  bjd_array?: T_Bjd[];
 };
 
-type Sido = {
+type T_Sido = {
   sido_name: string;
   sido_code: string;
-  sigungu_array: Sigungu[];
+  sigungu_array: T_Sigungu[];
 };
 
-type SigunguFlat = {
+type T_SigunguFlat = {
   sido_name: string;
   sido_code: string;
   sigungu_name: string;
   sigungu_code: string;
-  bjd_array?: Bjd[];
+  bjd_array?: T_Bjd[];
 };
 
-type SigunguKeyType = "code" | "name";
+type T_SigunguKeyType = "code" | "name";
 
 export class SigunguServiceClass {
   private static _instance: SigunguServiceClass;
-  private _dataCache: Sido[] | null = null;
+  private _dataCache: T_Sido[] | null = null;
   private _dataPath: string;
 
   private constructor(dataPath: string = "./sigungu.json") {
@@ -44,15 +44,15 @@ export class SigunguServiceClass {
     return SigunguServiceClass._instance;
   }
 
-  private _loadDataSync(): Sido[] {
+  private _loadDataSync(): T_Sido[] {
     if (!this._dataCache) {
       const raw = fs.readFileSync(this._dataPath, "utf8");
-      this._dataCache = JSON.parse(raw) as Sido[];
+      this._dataCache = JSON.parse(raw) as T_Sido[];
     }
     return this._dataCache;
   }
 
-  public getSigunguList(): SigunguFlat[] {
+  public getSigunguList(): T_SigunguFlat[] {
     const data = this._loadDataSync();
     return data.flatMap(({ sido_name, sido_code, sigungu_array }) =>
       sigungu_array.map(({ sigungu_name, sigungu_code, bjd_array }) => ({
@@ -65,7 +65,7 @@ export class SigunguServiceClass {
     );
   }
 
-  public getSigunguMap(keyType: SigunguKeyType = "code"): Map<string, Omit<SigunguFlat, "bjd_array">> {
+  public getSigunguMap(keyType: T_SigunguKeyType = "code"): Map<string, Omit<T_SigunguFlat, "bjd_array">> {
     const list = this.getSigunguList();
     const map = new Map();
 
@@ -77,16 +77,16 @@ export class SigunguServiceClass {
     return map;
   }
 
-  public getBjdList(): Bjd[] {
+  public getBjdList(): T_Bjd[] {
     const data = this._loadDataSync();
     return data.flatMap(({ sigungu_array }) =>
       sigungu_array.flatMap(({ bjd_array }) => bjd_array ?? [])
     );
   }
 
-  public getBjdMapBySigungu(keyType: SigunguKeyType = "name"): Map<string, Bjd[]> {
+  public getBjdMapBySigungu(keyType: T_SigunguKeyType = "name"): Map<string, T_Bjd[]> {
     const list = this.getSigunguList();
-    const map = new Map<string, Bjd[]>();
+    const map = new Map<string, T_Bjd[]>();
 
     list.forEach(({ sigungu_name, sigungu_code, bjd_array }) => {
       const key = keyType === "code" ? sigungu_code : sigungu_name;
@@ -96,7 +96,6 @@ export class SigunguServiceClass {
     return map;
   }
 }
-
 
 const SigunguService = SigunguServiceClass.getInstance();
 export default SigunguService;

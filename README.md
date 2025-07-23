@@ -29,21 +29,39 @@ yarn add budongsan-api
 
 ## 🚀 사용예제
 ```ts
-import { BudongsanAPIClass, SigunguService } from 'budongsan-api'; // ESM
-// or const { BudongsanAPIClass, SigunguService } = require('budongsan-api'); // CommonJS
+import { BudongsanAPIClass, BudongsanUtil, SigunguService } from 'budongsan-api'; // ESM
+// or const { BudongsanAPIClass, BudongsanUtil, SigunguService } = require('budongsan-api'); // CommonJS
 
 // API 키는 공공데이터 포털에서 발급받은 서비스 키를 입력하세요.
 const budongsan_api = new BudongsanAPIClass('YOUR_SERVICE_KEY');
 
 async function main() {
   try {
-    // 아파트 단지 기본 정보 조회
+    // 아파트 단지 조회
     const info = await budongsan_api.getApartmentBasicInfo('A10027364'); // '덕수궁롯데캐슬아파트'
     console.log('단지 정보:', info);
 
-    // 실거래가 조회 (서울 종로구, 2025년 5월 1페이지에서 10개 거래내역 가져옴)
-    const priceList = await budongsan_api.getApartmentTradeDetail('11110', '202505', '1', '10'); 
-    console.log('실거래가 정보:', priceList);
+    const info = await budongsan_api.getApartmentDetailInfo('A10027364');
+    console.log('단지 상세 정보:', info);
+
+    const priceList = await budongsan_api.getApartmentList('11110');
+    console.log('단지 정보 List:', priceList);
+
+    // 실거래가 조회 (서울 종로구, 2025년 5월)
+    const apartmentTradeBasicList = await budongsan_api.getApartmentTradeBasicList('11110', '202505');
+    console.log('실거래가 정보:', apartmentTradeBasicList);
+
+    const apartmentTradeDetailList = await budongsan_api.getApartmentTradeDetailList('11110', '202505');
+    console.log('실거래가 디테일 정보:', apartmentTradeDetailList);
+
+    // 전월세가 조회
+    const apartmentTradeRentList = await budongsan_api.getApartmentRentList('11110', '202505');
+    console.log('전월세가 정보:', apartmentTradeRentList);
+
+    // 총괄표제부 조회
+    const brRecapTitleList = await budongsan_api.getBrRecapTitleList("11710", "11200", "0138", "0000");
+    console.log('총괄표제부 정보:', brRecapTitleList);
+
 
     // 전체 시군구 목록 조회
     const sigunguList = SigunguService.getSigunguList();
@@ -76,6 +94,16 @@ async function main() {
       ...
     ]
     */
+
+    const now = BudongsanUtil.getKoreanYearMonth();
+    console.log(now); // { year: '2025', month: '07' }
+
+    const ymdList = BudongsanUtil.generateDealYMDRange(2024, 5, 2025, 7);
+    console.log(ymdList); // ['202405', '202406', ..., '202507']
+
+    const amount = BudongsanUtil.formatKoreanCurrency('55,000');
+    console.log(amount); // "5억 5000만 원"
+
   } catch (error) {
     console.error('API 호출 실패:', error.message);
   }

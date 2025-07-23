@@ -29,21 +29,53 @@ yarn add budongsan-api
 
 ## 🚀 사용예제
 ```ts
-import { BudongsanAPI } from 'budongsan-api'; // ESM
-// or const { BudongsanAPI } = require('budongsan-api'); // CommonJS
+import { BudongsanAPIClass, SigunguService } from 'budongsan-api'; // ESM
+// or const { BudongsanAPIClass, SigunguService } = require('budongsan-api'); // CommonJS
 
 // API 키는 공공데이터 포털에서 발급받은 서비스 키를 입력하세요.
-const api = new BudongsanAPI('YOUR_SERVICE_KEY');
+const budongsan_api = new BudongsanAPIClass('YOUR_SERVICE_KEY');
 
 async function main() {
   try {
     // 아파트 단지 기본 정보 조회
-    const info = await api.getApartmentBasicInfo('A10027364'); // '덕수궁롯데캐슬아파트'
+    const info = await budongsan_api.getApartmentBasicInfo('A10027364'); // '덕수궁롯데캐슬아파트'
     console.log('단지 정보:', info);
 
     // 실거래가 조회 (서울 종로구, 2025년 5월 1페이지에서 10개 거래내역 가져옴)
-    const priceList = await api.getApartmentTradeDetail('1', '10', '11110', '202505'); 
+    const priceList = await budongsan_api.getApartmentTradeDetail('1', '10', '11110', '202505'); 
     console.log('실거래가 정보:', priceList);
+
+    // 전체 시군구 목록 조회
+    const sigunguList = SigunguService.getSigunguList();
+    console.log('시군구 목록:', sigunguList);
+    /*
+    [
+      {
+        sido_name: "서울",
+        sido_code: "1",
+        sigungu_name: "강남구",
+        sigungu_code: "11680'",
+        bjd_array: [...]
+      },
+      ...
+    ]
+    */
+    // 시군구 Map (코드 또는 이름 기준)
+    const mapByCode = SigunguService.getSigunguMap("code");
+    console.log('강남구 정보:', mapByCode.get("11680"));
+
+    const mapByName = SigunguService.getSigunguMap("name");
+    console.log('강남구 정보:', mapByName.get("강남구"));
+
+    // 전체 법정동 리스트
+    const bjdList = SigunguService.getBjdList();
+    console.log('법정동 목록:',bjdList);
+    /*
+    [
+      { bjd_code: "10700", bjd_name: "신사동", sigungu_bjd_code: "1168010700" },
+      ...
+    ]
+    */
   } catch (error) {
     console.error('API 호출 실패:', error.message);
   }
@@ -58,7 +90,9 @@ main();
 
 <br>
 
-### 📌 아파트 단지 정보
+### BudongsanAPIClass 클래스
+
+#### 📌 아파트 단지 정보
 
 | 메서드 | 설명 |
 |--------|------|
@@ -68,7 +102,7 @@ main();
 
 <br>
 
-### 📌 실거래가
+#### 📌 실거래가
 
 | 메서드 | 설명 |
 |--------|------|
@@ -77,11 +111,27 @@ main();
 
 <br>
 
-### 📌 전월세
+#### 📌 전월세
 
 | 메서드 | 설명 |
 |--------|------|
 | `getApartmentRentInfo(LAWD_CD: string, DEAL_YMD: string)` | 전월세 거래 정보 조회 |
+
+### SigunguService 인스턴스
+
+#### 📌 시군구 정보
+
+| 메서드                                        | 설명                                               |
+| ------------------------------------------ | ------------------------------------------------ |
+| `getSigunguList()`                         | 시도/시군구 목록을 평탄화된 배열로 반환                           |
+| `getSigunguMap(keyType: "code" \| "name")` | 시군구 정보를 Map으로 반환 (`keyType`에 따라 시군구 코드 또는 이름 기준) |
+
+#### 📌 법정동 정보 (BJD)
+
+| 메서드                                             | 설명                                                      |
+| ----------------------------------------------- | ------------------------------------------------------- |
+| `getBjdList()`                                  | 모든 시군구에 포함된 법정동 목록을 평탄화된 배열로 반환                         |
+| `getBjdMapBySigungu(keyType: "code" \| "name")` | 시군구별 법정동 배열을 Map 형태로 반환 (`keyType`에 따라 시군구 코드 또는 이름 기준) |
 
 <br><br>
 

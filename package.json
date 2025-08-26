@@ -1,6 +1,6 @@
 {
   "name": "budongsan-api",
-  "version": "1.0.37",
+  "version": "1.0.38",
   "description": "국토교통부 아파트 실거래가, 전월세, 단지 정보, 용적률 등 공공데이터 API 래퍼",
   "keywords": [
     "budongsan",

@@ -1,214 +1,414 @@
-# 🏘️ BudongsanAPI
+# 🏠 BudongsanAPI
 
-> 국토교통부 공공데이터 포털의 아파트 단지 정보, 실거래가, 전월세 데이터를 간편하게 조회할 수 있는 TypeScript 기반 API 클라이언트입니다.
+> 국토교통부 공공데이터를 쉽고 빠르게! TypeScript로 만든 부동산 정보 조회 라이브러리
+
+[![npm version](https://badge.fury.io/js/budongsan-api.svg)](https://www.npmjs.com/package/budongsan-api)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+
 ---
 
-<br><br>
+## 🌟 주요 기능
 
-## ✨ 특징
+- 📊 **아파트 단지 정보** - 기본/상세 정보를 한 번에
+- 💰 **실거래가 조회** - 매매 거래 내역 (기본/상세)  
+- 🏘️ **전월세 정보** - 임대차 거래 내역
+- 🏗️ **건축물대장** - 총괄표제부 조회
+- 🗺️ **지역 정보** - 전국 시군구/법정동 데이터
+- ⚡ **완전한 TypeScript 지원** - 타입 안전성 보장
+- 🛡️ **에러 핸들링** - 명확한 예외 처리
 
-- 아파트 단지 기본 및 상세 정보 조회
-- 실거래가(기본, 상세) 데이터 조회
-- 전월세 거래 정보 조회
-- Axios 기반 HTTP 클라이언트 사용
-- TypeScript 지원 및 타입 안전성 보장
-- 요청 실패 시 명확한 예외 처리
 ---
 
-<br><br>
-
-## 📦 설치
+## 📦 설치하기
 
 ```bash
 npm install budongsan-api
-# 또는
+```
+
+```bash
 yarn add budongsan-api
 ```
 
-<br><br>
+---
 
-## 🚀 사용예제
-```ts
-import { BudongsanAPIClass, BudongsanUtil, SigunguService } from 'budongsan-api'; // ESM
-// or const { BudongsanAPIClass, BudongsanUtil, SigunguService } = require('budongsan-api'); // CommonJS
+## 🚀 빠른 시작
 
-// API 키는 공공데이터 포털에서 발급받은 서비스 키를 입력하세요.
-const budongsan_api = new BudongsanAPIClass('YOUR_SERVICE_KEY');
+### 기본 사용법
 
-async function main() {
+```typescript
+import { BudongsanAPIClass, BudongsanUtil, SigunguService } from 'budongsan-api';
+
+// 🔑 공공데이터포털에서 발급받은 API 키를 입력하세요
+const api = new BudongsanAPIClass('YOUR_SERVICE_KEY');
+
+async function example() {
   try {
-    // 아파트 단지 조회
-    const info = await budongsan_api.getApartmentBasicInfo('A10027364'); // '덕수궁롯데캐슬아파트'
-    console.log('단지 정보:', info);
+    // 🏢 아파트 단지 기본 정보
+    const basicInfo = await api.getApartmentBasicInfo('A10027364');
+    console.log('단지명:', basicInfo.kaptName);
 
-    const info = await budongsan_api.getApartmentDetailInfo('A10027364');
-    console.log('단지 상세 정보:', info);
+    // 💰 실거래가 조회 (서울 강남구, 2024년 12월)
+    const trades = await api.getApartmentTradeBasicList('11680', '202412');
+    console.log('거래 건수:', trades.length);
 
-    const priceList = await budongsan_api.getApartmentList('11110');
-    console.log('단지 정보 List:', priceList);
-
-    // 실거래가 조회 (서울 종로구, 2025년 5월)
-    const apartmentTradeBasicList = await budongsan_api.getApartmentTradeBasicList('11110', '202505');
-    console.log('실거래가 정보:', apartmentTradeBasicList);
-
-    const apartmentTradeDetailList = await budongsan_api.getApartmentTradeDetailList('11110', '202505');
-    console.log('실거래가 디테일 정보:', apartmentTradeDetailList);
-
-    // 전월세가 조회
-    const apartmentTradeRentList = await budongsan_api.getApartmentRentList('11110', '202505');
-    console.log('전월세가 정보:', apartmentTradeRentList);
-
-    // 총괄표제부 조회
-    const brRecapTitleList = await budongsan_api.getBrRecapTitleList("11710", "11200", "0138", "0000");
-    console.log('총괄표제부 정보:', brRecapTitleList);
-
-
-    // 전체 시군구 목록 조회
-    const sigunguList = SigunguService.getSigunguList();
-    console.log('시군구 목록:', sigunguList);
-    /*
-    [
-      {
-        sido_name: "서울",
-        sido_code: "1",
-        sigungu_name: "강남구",
-        sigungu_code: "11680'",
-        bjd_array: [...]
-      },
-      ...
-    ]
-    */
-    // 시군구 Map (코드 또는 이름 기준)
-    const mapByCode = SigunguService.getSigunguMap("code");
-    console.log('강남구 정보:', mapByCode.get("11680"));
-
-    const mapByName = SigunguService.getSigunguMap("name");
-    console.log('강남구 정보:', mapByName.get("강남구"));
-
-    // 전체 법정동 리스트
-    const bjdList = SigunguService.getBjdList();
-    console.log('법정동 목록:',bjdList);
-    /*
-    [
-      { bjd_code: "10700", bjd_name: "신사동", sigungu_bjd_code: "1168010700" },
-      ...
-    ]
-    */
-
-    const now = BudongsanUtil.getKoreanYearMonth();
-    console.log(now); // { year: '2025', month: '07' }
-
-    const ymdList = BudongsanUtil.generateDealYMDRange(2024, 5, 2025, 7);
-    console.log(ymdList); // ['202405', '202406', ..., '202507']
-
-    const amount = BudongsanUtil.formatKoreanCurrency('55,000');
-    console.log(amount); // "5억 5000만 원"
+    // 🏘️ 전월세 정보
+    const rents = await api.getApartmentRentList('11680', '202412');
+    console.log('임대차 거래:', rents.length);
 
   } catch (error) {
-    console.error('API 호출 실패:', error.message);
+    console.error('❌ API 호출 실패:', error.message);
   }
 }
-
-main();
 ```
 
-<br><br>
+---
 
-## 📘 지원 메서드
+## 📖 상세 사용 가이드
 
-<br>
+### 1️⃣ 아파트 단지 정보
 
-### BudongsanAPIClass 클래스
+```typescript
+// 기본 정보 (이름, 주소, 세대수, 건설사 등)
+const basicInfo = await api.getApartmentBasicInfo('A10027364');
+console.log({
+  단지명: basicInfo.kaptName,
+  주소: basicInfo.kaptAddr,
+  세대수: basicInfo.kaptdaCnt,
+  건설사: basicInfo.kaptBcompany
+});
 
-#### 📌 아파트 단지 정보
+// 상세 정보 (관리비, 편의시설, 교통 등)
+const detailInfo = await api.getApartmentDetailInfo('A10027364');
+console.log({
+  관리방식: detailInfo.codeMgr,
+  편의시설: detailInfo.convenientFacility,
+  지하철접근: detailInfo.kaptdWtimesub
+});
+
+// 지역별 아파트 목록
+const apartments = await api.getApartmentList('11680'); // 강남구
+console.log('강남구 아파트:', apartments.length, '개');
+```
+
+### 2️⃣ 실거래가 정보
+
+```typescript
+// 기본 거래 정보
+const basicTrades = await api.getApartmentTradeBasicList('11680', '202412');
+basicTrades.forEach(trade => {
+  console.log(`${trade.aptNm}: ${trade.dealAmount}만원 (${trade.excluUseAr}㎡)`);
+});
+
+// 상세 거래 정보 (도로명주소, 상세 지번 등 포함)
+const detailTrades = await api.getApartmentTradeDetailList('11680', '202412');
+detailTrades.forEach(trade => {
+  console.log(`${trade.aptNm} - ${trade.roadNm} ${trade.roadNmBonbun}-${trade.roadNmBubun}`);
+});
+```
+
+### 3️⃣ 전월세 정보
+
+```typescript
+const rents = await api.getApartmentRentList('11680', '202412');
+rents.forEach(rent => {
+  const deposit = BudongsanUtil.FormatKoreanCurrency(rent.deposit);
+  console.log(`${rent.aptNm}: 보증금 ${deposit}, 월세 ${rent.monthlyRent}만원`);
+});
+```
+
+### 4️⃣ 건축물대장 조회
+
+```typescript
+// 건축물대장 총괄표제부
+const building = await api.getBrRecapTitleList(
+  '11710', // 송파구
+  '11200', // 법정동코드  
+  '0138',  // 번지
+  '0000'   // 호수
+);
+console.log('건물명:', building.bldNm);
+console.log('용도:', building.mainPurpsCdNm);
+```
+
+### 5️⃣ 지역 정보 활용
+
+```typescript
+// 📍 전국 시군구 목록
+const sigunguList = SigunguService.getSigunguList();
+console.log('총', sigunguList.length, '개 시군구');
+
+// 🗺️ 시군구 코드로 검색
+const mapByCode = SigunguService.getSigunguMap('code');
+const gangnam = mapByCode.get('11680');
+console.log(gangnam); // { sigungu_name: '강남구', sido_name: '서울' }
+
+// 🏘️ 시군구명으로 검색  
+const mapByName = SigunguService.getSigunguMap('name');
+const gangnamByName = mapByName.get('강남구');
+console.log(gangnamByName.sigungu_code); // '11680'
+
+// 📋 전국 법정동 목록
+const bjdList = SigunguService.getBjdList();
+console.log('총', bjdList.length, '개 법정동');
+
+// 🗃️ 시군구별 법정동
+const bjdBySigungu = SigunguService.getBjdMapBySigungu('name');
+const gangnamBjd = bjdBySigungu.get('강남구');
+console.log('강남구 법정동:', gangnamBjd.map(bjd => bjd.bjd_name));
+```
+
+---
+
+## 🛠️ 유틸리티 함수
+
+### 날짜 및 화폐 처리
+
+```typescript
+// 📅 현재 한국 시간 기준 연월
+const { year, month } = BudongsanUtil.getKoreanYearMonth();
+console.log(`${year}년 ${month}월`); // 2025년 1월
+
+// 📆 기간별 연월 생성
+const months = BudongsanUtil.generateDealYMDRange(2024, 1, 2024, 12);
+console.log(months); // ['202401', '202402', ..., '202412']
+
+// 💰 한글 화폐 단위 변환
+const price = BudongsanUtil.FormatKoreanCurrency('55000');
+console.log(price); // "5억 5000만 원"
+
+const bigPrice = BudongsanUtil.FormatKoreanCurrency('123456789');
+console.log(bigPrice); // "12조 3456억 7890만 원"
+```
+
+### 지도 API 연동
+
+```typescript
+// 🗺️ 구글 지도 좌표 변환
+const googleCoords = await BudongsanUtil.GetGoogleMapLatitudeAndlongitude(
+  '서울특별시 강남구 테헤란로 142',
+  'YOUR_GOOGLE_API_KEY'
+);
+console.log(googleCoords); // { latitude: "37.5012767", longitude: "127.0396597" }
+
+// 📍 카카오 지도 정보
+const kakaoInfo = await BudongsanUtil.GetKakaoMapPosition(
+  '서울특별시 강남구 테헤란로 142',
+  'YOUR_KAKAO_API_KEY'  
+);
+console.log(kakaoInfo.apartKakaoName); // 건물명
+
+// 🏪 주변 시설 검색 (카카오)
+const facilities = await BudongsanUtil.GetKakaoCategory(
+  37.5012767,    // 위도
+  127.0396597,   // 경도  
+  'MT1',         // 대형마트
+  'YOUR_KAKAO_API_KEY'
+);
+console.log('주변 대형마트:', facilities.length, '개');
+```
+
+---
+
+## 📋 API 메서드 전체 목록
+
+### 🏢 BudongsanAPIClass
+
+| 메서드 | 설명 | 매개변수 |
+|--------|------|----------|
+| `getApartmentBasicInfo()` | 아파트 기본정보 | `kaptCode` |
+| `getApartmentDetailInfo()` | 아파트 상세정보 | `kaptCode` |
+| `getApartmentList()` | 지역별 아파트목록 | `sigunguCode`, `numOfRows?`, `pageNo?` |
+| `getApartmentTradeBasicList()` | 실거래가 기본 | `sigunguCode`, `DEAL_YMD`, `numOfRows?`, `pageNo?` |
+| `getApartmentTradeDetailList()` | 실거래가 상세 | `sigunguCode`, `DEAL_YMD`, `numOfRows?`, `pageNo?` |
+| `getApartmentRentList()` | 전월세 정보 | `sigunguCode`, `DEAL_YMD`, `numOfRows?`, `pageNo?` |
+| `getBrRecapTitleList()` | 건축물대장 | `sigunguCode`, `bjdongCode`, `bun`, `ji`, `numOfRows?`, `pageNo?` |
+
+### 🗺️ SigunguService
+
+| 메서드 | 설명 | 반환타입 |
+|--------|------|-----------|
+| `getSigunguList()` | 전국 시군구 목록 | `T_SigunguFlat[]` |
+| `getSigunguMap(keyType)` | 시군구 맵 | `Map<string, T_SigunguFlat>` |
+| `getBjdList()` | 전국 법정동 목록 | `T_Bjd[]` |
+| `getBjdMapBySigungu(keyType)` | 시군구별 법정동 맵 | `Map<string, T_Bjd[]>` |
+
+### 🔧 BudongsanUtil
 
 | 메서드 | 설명 |
 |--------|------|
-| `getApartmentBasicInfo(kaptCode: string)` | 단지 기본 정보 조회 |
-| `getApartmentDetailInfo(kaptCode: string)` | 단지 상세 정보 조회 |
-| `getApartmentList(sigunguCode: string, numOfRows?: string, pageNo?: string)` | 시군구 코드 기반 아파트 목록 조회 |
+| `getKoreanYearMonth()` | 현재 한국 기준 연월 |
+| `generateDealYMDRange()` | 기간별 연월 배열 생성 |
+| `FormatKoreanCurrency()` | 한글 화폐 단위 변환 |
+| `GetGoogleMapLatitudeAndlongitude()` | 구글 지도 좌표 변환 |
+| `GetKakaoMapPosition()` | 카카오 지도 정보 조회 |
+| `GetKakaoCategory()` | 카카오 주변 시설 검색 |
 
+---
 
-<br>
+## 🎯 실전 활용 예제
 
-#### 📌 실거래가
+### 특정 지역 시세 분석
 
-| 메서드 | 설명 |
-|--------|------|
-| `getApartmentTradeBasicList(sigunguCode: string, DEAL_YMD: string, numOfRows?: string, pageNo?: string)` | 실거래가 기본 데이터 조회 |
-| `getApartmentTradeDetailList(sigunguCode: string, DEAL_YMD: string, numOfRows?: string, pageNo?: string)` | 실거래가 상세 데이터 조회 |
+```typescript
+async function analyzeAreaPrice() {
+  const api = new BudongsanAPIClass('YOUR_SERVICE_KEY');
+  
+  // 강남구 2024년 전체 거래 분석
+  const months = BudongsanUtil.generateDealYMDRange(2024, 1, 2024, 12);
+  const allTrades = [];
+  
+  for (const month of months) {
+    const trades = await api.getApartmentTradeBasicList('11680', month);
+    allTrades.push(...trades);
+  }
+  
+  // 평균 거래가 계산
+  const avgPrice = allTrades.reduce((sum, trade) => {
+    return sum + parseInt(trade.dealAmount.replace(',', ''));
+  }, 0) / allTrades.length;
+  
+  console.log('강남구 2024년 평균 거래가:', 
+    BudongsanUtil.FormatKoreanCurrency(avgPrice.toString())
+  );
+}
+```
 
-<br>
+### 아파트 단지별 상세 리포트
 
-#### 📌 전월세
+```typescript
+async function generateApartmentReport(kaptCode: string) {
+  const api = new BudongsanAPIClass('YOUR_SERVICE_KEY');
+  
+  // 기본 정보
+  const basic = await api.getApartmentBasicInfo(kaptCode);
+  const detail = await api.getApartmentDetailInfo(kaptCode);
+  
+  // 위치 정보
+  const location = await BudongsanUtil.GetKakaoMapPosition(
+    basic.doroJuso, 'YOUR_KAKAO_API_KEY'
+  );
+  
+  // 주변 편의시설
+  const marts = await BudongsanUtil.GetKakaoCategory(
+    location.latitude, location.longitude, 'MT1', 'YOUR_KAKAO_API_KEY'
+  );
+  
+  console.log(`
+📋 ${basic.kaptName} 단지 리포트
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-| 메서드 | 설명 |
-|--------|------|
-| `getApartmentRentList(sigunguCode: string, DEAL_YMD: string, numOfRows?: string, pageNo?: string)` | 전월세 거래 정보 조회 |
+🏠 기본 정보
+   • 주소: ${basic.doroJuso}
+   • 세대수: ${basic.kaptdaCnt.toLocaleString()}세대
+   • 건설사: ${basic.kaptBcompany}
+   • 준공: ${basic.kaptUsedate}
 
-<br>
+🏪 편의시설
+   • 주변 대형마트: ${marts.length}개
+   • 지하철 접근: ${detail.kaptdWtimesub}
+   
+🚗 교통 정보  
+   • 버스 접근: ${detail.kaptdWtimebus}
+   • 지하철역: ${detail.subwayStation} (${detail.subwayLine})
+  `);
+}
+```
 
-#### 📌 건축물대장
+---
 
-| 메서드 | 설명 |
-|--------|------|
-| `getBrRecapTitleList(sigunguCode: string, bjdongCode: string, bun: string, ji: string, numOfRows?: string, pageNo?: string)` | 건축물대장 총괄표제부 정보 조회 |
+## ⚙️ 환경 설정
 
-<br>
+### 필수 요구사항
 
-### SigunguService 인스턴스
+- **Node.js 14.0.0 이상**
+- **공공데이터포털 API 키**
 
-#### 📌 시군구 정보
+### API 키 발급받기
 
-| 메서드                                        | 설명                                               |
-| ------------------------------------------ | ------------------------------------------------ |
-| `getSigunguList()`                         | 시도/시군구 목록을 평탄화된 배열로 반환                           |
-| `getSigunguMap(keyType: "code" \| "name")` | 시군구 정보를 Map으로 반환 (`keyType`에 따라 시군구 코드 또는 이름 기준) |
+1. [공공데이터포털](https://www.data.go.kr/) 회원가입
+2. 다음 서비스 신청:
+   - 아파트매매 실거래 상세 자료
+   - 아파트 전월세 신고 조회 서비스  
+   - 아파트 단지 정보 제공 서비스
+   - 건축물대장 표제부 조회 서비스
+3. 승인 후 발급받은 서비스 키 사용
 
-<br>
+### 환경변수 설정
 
-#### 📌 법정동 정보 (BJD)
+```bash
+# .env 파일
+BUDONGSAN_API_KEY=your_service_key_here
+GOOGLE_MAPS_API_KEY=your_google_key_here  
+KAKAO_API_KEY=your_kakao_key_here
+```
 
-| 메서드                                             | 설명                                                      |
-| ----------------------------------------------- | ------------------------------------------------------- |
-| `getBjdList()`                                  | 모든 시군구에 포함된 법정동 목록을 평탄화된 배열로 반환                         |
-| `getBjdMapBySigungu(keyType: "code" \| "name")` | 시군구별 법정동 배열을 Map 형태로 반환 (`keyType`에 따라 시군구 코드 또는 이름 기준) |
+```typescript
+// 환경변수 사용
+const api = new BudongsanAPIClass(process.env.BUDONGSAN_API_KEY);
+```
 
-<br><br>
+---
 
-메서드 계속 추가 예정입니다!
+## 🚨 에러 처리 가이드
 
-<br><br>
+### 주요 에러 유형
 
-## 🛠️ 요구 사항
+```typescript
+try {
+  const result = await api.getApartmentBasicInfo('invalid_code');
+} catch (error) {
+  console.error('에러 타입:', error.message);
+  
+  // 에러별 처리
+  if (error.message.includes('Network Error')) {
+    console.log('🌐 네트워크 연결을 확인하세요');
+  } else if (error.message.includes('API Error')) {
+    console.log('🔑 API 키 또는 매개변수를 확인하세요');  
+  }
+}
+```
 
-- **Node.js 14 이상**  
-  최신 Node.js 런타임 환경이 필요합니다.
+### 일반적인 에러 상황
 
-- **API 키**  
-  국토교통부 공공데이터 포털에서 발급받은 서비스 키를 사용해야 합니다.  
-  👉 [공공데이터포털 바로가기](https://www.data.go.kr/)
+| 에러 메시지 | 원인 | 해결방법 |
+|------------|------|----------|
+| `Network Error` | 네트워크 연결 실패 | 인터넷 연결 확인 |
+| `API Error: SERVICE KEY IS NOT REGISTERED` | 잘못된 API 키 | 공공데이터포털에서 키 재확인 |
+| `API Error: NO_DATA` | 조회 결과 없음 | 매개변수 값 확인 |
+| `API Error: LIMITED_NUMBER_OF_SERVICE_REQUESTS_EXCEEDS` | 호출 횟수 초과 | 잠시 후 재시도 |
 
-<br><br>
+---
 
-## ❗ 예외 처리
+## 🤝 기여하기
 
-모든 API 호출은 `try...catch` 구문을 통해 실패 시 명확한 예외 정보를 제공합니다.
+이 프로젝트에 기여하고 싶으시다면:
 
-- 오류 발생 시 `Error` 객체가 throw되며, `error.message`를 통해 상세 원인을 확인할 수 있습니다.
+1. 이슈 등록 또는 기능 제안
+2. Fork & Pull Request
+3. 코드 리뷰 및 테스트
 
-예외는 다음과 같은 경우에 발생할 수 있습니다:
+---
 
-- ❌ **잘못된 API 키**  
-  인증되지 않은 키를 사용할 경우
+## 📄 라이선스
 
-- 🌐 **네트워크 오류**  
-  서버 연결 실패, 응답 지연 등
+MIT License - 자유롭게 사용하세요!
 
-- 🏢 **존재하지 않는 단지 코드**  
-  유효하지 않은 단지 코드를 전달한 경우
+---
 
-- ⛔ **요청 제한 초과**  
-  API 호출 횟수 제한을 초과했을 경우
+## 🔗 관련 링크
 
-<br><br>
+- [공공데이터포털](https://www.data.go.kr/)
+- [국토교통부 실거래가 공개시스템](http://rtms.molit.go.kr/)  
+- [카카오 지도 API](https://developers.kakao.com/docs/latest/ko/local/dev-guide)
+- [구글 지도 API](https://developers.google.com/maps/documentation)
+
+---
+
+<div align="center">
+
+**🏠 BudongsanAPI로 스마트한 부동산 데이터 분석을 시작하세요! 🚀**
+
+[⭐ GitHub에서 Star 주기](https://github.com/your-repo/budongsan-api) | [📝 이슈 제보](https://github.com/your-repo/budongsan-api/issues) | [📚 더 많은 예제](https://github.com/your-repo/budongsan-api/examples)
+
+</div>

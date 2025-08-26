@@ -48,7 +48,7 @@ class BudongsanUtil {
    * @param {string|number} amount 원 단위 기준 숫자 또는 문자열
    * @returns {string} 한글 화폐 단위 문자열
    */
-  static FormatKoreanCurrency(amount: string | number): string {
+  static formatKoreanCurrency(amount: string | number): string {
     const unitMap = ['원', '만', '억', '조', '경', '해'];
     const isNegative = String(amount).startsWith('-');
     const numericStr = String(amount).replace(/[^0-9]/g, '') + '0000';
@@ -70,7 +70,7 @@ class BudongsanUtil {
     return isNegative ? `( -${result} )` : result;
   }
 
-  static GetGoogleMapLatitudeAndlongitude = async (krjuso: string, googleApikey: string) => {
+  static getGoogleMapLatitudeAndlongitude = async (krjuso: string, googleApikey: string) => {
     const encodedJuso = encodeURI(krjuso);
     const latitudeNlongitude = await axios({
         method: 'get',
@@ -91,7 +91,7 @@ class BudongsanUtil {
     return latitudeNlongitude;
   }
 
-  static GetKakaoMapPosition = async(param_juso: string | number | boolean, kakaoApikey: string) => {
+  static getKakaoMapPosition = async(param_juso: string | number | boolean, kakaoApikey: string) => {
     return await axios({
     method: 'get',
     url: `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(param_juso)}`,
@@ -129,7 +129,7 @@ class BudongsanUtil {
     });
   }
 
-  static GetKakaoCategory = async(param_y: number, param_x: number, param_category_group_code: string, kakaoApikey: string) => {
+  static getKakaoCategory = async(param_y: number, param_x: number, param_category_group_code: string, kakaoApikey: string) => {
     return await axios({
         method: 'get',
         url: `https://dapi.kakao.com/v2/local/search/category.json`,

@@ -112,7 +112,7 @@ detailTrades.forEach(trade => {
 ```typescript
 const rents = await api.getApartmentRentList('11680', '202412');
 rents.forEach(rent => {
-  const deposit = BudongsanUtil.FormatKoreanCurrency(rent.deposit);
+  const deposit = BudongsanUtil.formatKoreanCurrency(rent.deposit);
   console.log(`${rent.aptNm}: 보증금 ${deposit}, 월세 ${rent.monthlyRent}만원`);
 });
 ```
@@ -174,10 +174,10 @@ const months = BudongsanUtil.generateDealYMDRange(2024, 1, 2024, 12);
 console.log(months); // ['202401', '202402', ..., '202412']
 
 // 💰 한글 화폐 단위 변환
-const price = BudongsanUtil.FormatKoreanCurrency('55000');
+const price = BudongsanUtil.formatKoreanCurrency('55000');
 console.log(price); // "5억 5000만 원"
 
-const bigPrice = BudongsanUtil.FormatKoreanCurrency('123456789');
+const bigPrice = BudongsanUtil.formatKoreanCurrency('123456789');
 console.log(bigPrice); // "12조 3456억 7890만 원"
 ```
 
@@ -185,21 +185,21 @@ console.log(bigPrice); // "12조 3456억 7890만 원"
 
 ```typescript
 // 🗺️ 구글 지도 좌표 변환
-const googleCoords = await BudongsanUtil.GetGoogleMapLatitudeAndlongitude(
+const googleCoords = await BudongsanUtil.getGoogleMapLatitudeAndlongitude(
   '서울특별시 강남구 테헤란로 142',
   'YOUR_GOOGLE_API_KEY'
 );
 console.log(googleCoords); // { latitude: "37.5012767", longitude: "127.0396597" }
 
 // 📍 카카오 지도 정보
-const kakaoInfo = await BudongsanUtil.GetKakaoMapPosition(
+const kakaoInfo = await BudongsanUtil.getKakaoMapPosition(
   '서울특별시 강남구 테헤란로 142',
   'YOUR_KAKAO_API_KEY'  
 );
 console.log(kakaoInfo.apartKakaoName); // 건물명
 
 // 🏪 주변 시설 검색 (카카오)
-const facilities = await BudongsanUtil.GetKakaoCategory(
+const facilities = await BudongsanUtil.getKakaoCategory(
   37.5012767,    // 위도
   127.0396597,   // 경도  
   'MT1',         // 대형마트
@@ -239,10 +239,10 @@ console.log('주변 대형마트:', facilities.length, '개');
 |--------|------|
 | `getKoreanYearMonth()` | 현재 한국 기준 연월 |
 | `generateDealYMDRange()` | 기간별 연월 배열 생성 |
-| `FormatKoreanCurrency()` | 한글 화폐 단위 변환 |
-| `GetGoogleMapLatitudeAndlongitude()` | 구글 지도 좌표 변환 |
-| `GetKakaoMapPosition()` | 카카오 지도 정보 조회 |
-| `GetKakaoCategory()` | 카카오 주변 시설 검색 |
+| `formatKoreanCurrency()` | 한글 화폐 단위 변환 |
+| `getGoogleMapLatitudeAndlongitude()` | 구글 지도 좌표 변환 |
+| `getKakaoMapPosition()` | 카카오 지도 정보 조회 |
+| `getKakaoCategory()` | 카카오 주변 시설 검색 |
 
 ---
 
@@ -269,7 +269,7 @@ async function analyzeAreaPrice() {
   }, 0) / allTrades.length;
   
   console.log('강남구 2024년 평균 거래가:', 
-    BudongsanUtil.FormatKoreanCurrency(avgPrice.toString())
+    BudongsanUtil.formatKoreanCurrency(avgPrice.toString())
   );
 }
 ```
@@ -285,12 +285,12 @@ async function generateApartmentReport(kaptCode: string) {
   const detail = await api.getApartmentDetailInfo(kaptCode);
   
   // 위치 정보
-  const location = await BudongsanUtil.GetKakaoMapPosition(
+  const location = await BudongsanUtil.getKakaoMapPosition(
     basic.doroJuso, 'YOUR_KAKAO_API_KEY'
   );
   
   // 주변 편의시설
-  const marts = await BudongsanUtil.GetKakaoCategory(
+  const marts = await BudongsanUtil.getKakaoCategory(
     location.latitude, location.longitude, 'MT1', 'YOUR_KAKAO_API_KEY'
   );
   

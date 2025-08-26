@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "ES2020",
     "module": "ESNext", // 원본은 모듈로 유지
     "moduleResolution": "Node",
     "declaration": true,

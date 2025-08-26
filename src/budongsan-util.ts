@@ -1,3 +1,5 @@
+import axios, { AxiosResponse } from 'axios';
+
 class BudongsanUtil {
   /**
    * 현재 한국 기준 연도와 월을 반환합니다.
@@ -46,7 +48,7 @@ class BudongsanUtil {
    * @param {string|number} amount 원 단위 기준 숫자 또는 문자열
    * @returns {string} 한글 화폐 단위 문자열
    */
-  static formatKoreanCurrency(amount: string | number): string {
+  static FormatKoreanCurrency(amount: string | number): string {
     const unitMap = ['원', '만', '억', '조', '경', '해'];
     const isNegative = String(amount).startsWith('-');
     const numericStr = String(amount).replace(/[^0-9]/g, '') + '0000';
@@ -66,6 +68,85 @@ class BudongsanUtil {
 
     const result = parts.join(' ');
     return isNegative ? `( -${result} )` : result;
+  }
+
+  static GetGoogleMapLatitudeAndlongitude = async (krjuso: string, googleApikey: string) => {
+    const encodedJuso = encodeURI(krjuso);
+    const latitudeNlongitude = await axios({
+        method: 'get',
+        url: `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedJuso}&key=${googleApikey}`,
+    }).then((res: { data: { results: { geometry: { location: { lat: string; lng: string; }; }; }[]; }; }) => {
+        const latitude = res.data.results[0].geometry.location.lat;
+        const longitude = res.data.results[0].geometry.location.lng;
+        return {
+            latitude,
+            longitude
+        }
+    }).catch(() => {
+        return {
+            latitude: "",
+            longitude: ""
+        }
+    });
+    return latitudeNlongitude;
+  }
+
+  static GetKakaoMapPosition = async(param_juso: string | number | boolean, kakaoApikey: string) => {
+    return await axios({
+    method: 'get',
+    url: `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(param_juso)}`,
+    headers: {'Authorization' : `KakaoAK ${kakaoApikey}`}
+  })
+    .then((res: { data: { documents: { x: number; y:number; address: { address_name: string }, road_address: { address_name: string; building_name: string; }; }[]; }; }) => {
+        if (res.data.documents && res.data.documents[0] && res.data.documents[0].address && res.data.documents[0].road_address) {
+            const y = res.data.documents[0].y;
+            const x = res.data.documents[0].x;
+            return {
+                addressName: res.data.documents[0].address.address_name,
+                roadAddressName: res.data.documents[0].road_address.address_name,
+                apartKakaoName:  res.data.documents[0].road_address.building_name,
+                latitude: y,
+                longitude: x,
+            }
+        } else {
+            return {
+                addressName: "",
+                roadAddressName: "",
+                apartKakaoName: "",
+                latitude: "",
+                longitude: ""
+            }
+        }
+    })
+    .catch(() => {
+      return {
+        addressName: "",
+        roadAddressName: "",
+        apartKakaoName: "",
+        latitude: "",
+        longitude: ""
+      }
+    });
+  }
+
+  static GetKakaoCategory = async(param_y: number, param_x: number, param_category_group_code: string, kakaoApikey: string) => {
+    return await axios({
+        method: 'get',
+        url: `https://dapi.kakao.com/v2/local/search/category.json`,
+        headers: {'Authorization' : `KakaoAK ${kakaoApikey}`},
+        params: {
+            y: param_y ,
+            x: param_x ,
+            category_group_code: param_category_group_code,
+            radius: 4000
+        }
+    })
+    .then((res: { data: { documents: any; }; }) => {
+        return res.data.documents;
+    })
+    .catch(() => {
+        return []
+    });
   }
 }
 

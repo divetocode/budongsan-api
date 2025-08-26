@@ -409,6 +409,6 @@ MIT License - 자유롭게 사용하세요!
 
 **🏠 BudongsanAPI로 스마트한 부동산 데이터 분석을 시작하세요! 🚀**
 
-[⭐ GitHub에서 Star 주기](https://github.com/your-repo/budongsan-api) | [📝 이슈 제보](https://github.com/your-repo/budongsan-api/issues) | [📚 더 많은 예제](https://github.com/your-repo/budongsan-api/examples)
+[⭐ GitHub에서 Star 주기](https://github.com/divetocode/budongsan-api) | [📝 이슈 제보](https://github.com/divetocode/budongsan-api/issues) | [📚 더 많은 예제](https://github.com/divetocode/budongsan-api/examples)
 
 </div>
